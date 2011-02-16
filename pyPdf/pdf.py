@@ -701,7 +701,7 @@ class PdfFileReader(object):
         # start at the end:
         stream.seek(-1, 2)
         line = ''
-        while not line:
+        while not [ch for ch in line if ch not in (' ','\x00')]:
             line = self.readNextEndLine(stream)
         if line[:5] != "%%EOF":
             raise utils.PdfReadError, "EOF marker not found"
