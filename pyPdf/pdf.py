@@ -701,9 +701,10 @@ class PdfFileReader(object):
         # start at the end:
         stream.seek(-1, 2)
         line = ''
-        while not [ch for ch in line if ch not in (' ','\x00')]:
-            line = self.readNextEndLine(stream)
-        if line[:5] != "%%EOF":
+        try:
+            while line[:5] != "%%EOF":
+                line = self.readNextEndLine(stream)
+        except IOError:
             raise utils.PdfReadError, "EOF marker not found"
 
         # find startxref entry - the location of the xref table
